@@ -1,0 +1,521 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Social Robot Tree Search (SoRTS) - BIGLab</title>
+  
+
+  <link rel="stylesheet" href="/assets/css/app.css">
+
+  <link rel="shortcut icon" type="image/ico" href="/img/favicon/favicon.ico" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/img/favicon/site.webmanifest">
+  <link rel="mask-icon" href="/img/favicon/safari-pinned-tab.svg" color="#cc002b">
+  <meta name="msapplication-TileColor" content="#b91d47">
+  <meta name="theme-color" content="#ffffff">
+
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  
+  
+  <script>
+    $(document).ready(function () {
+      $('.content a').attr({ 'target': '_blank', 'rel': 'noopener noreferrer' });
+    });
+  </script>
+  
+
+  <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Social Robot Tree Search (SoRTS) | BIGLab</title>
+<meta name="generator" content="Jekyll v4.2.0" />
+<meta property="og:title" content="Social Robot Tree Search (SoRTS)" />
+<meta name="author" content="Ingrid Navarro" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Learned Tree Search for Long-Horizon Social Robot Navigation in Shared Airspace" />
+<meta property="og:description" content="Learned Tree Search for Long-Horizon Social Robot Navigation in Shared Airspace" />
+<link rel="canonical" href="https://cmubig.github.io/sorts/" />
+<meta property="og:url" content="https://cmubig.github.io/sorts/" />
+<meta property="og:site_name" content="BIGLab" />
+<meta property="og:image" content="https://cmubig.github.io/img/posts/2023-07-01-SoRTS/model.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2023-07-01T10:00:00+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://cmubig.github.io/img/posts/2023-07-01-SoRTS/model.png" />
+<meta property="twitter:title" content="Social Robot Tree Search (SoRTS)" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"https://cmubig.github.io/sorts/"},"author":{"@type":"Person","name":"Ingrid Navarro"},"description":"Learned Tree Search for Long-Horizon Social Robot Navigation in Shared Airspace","url":"https://cmubig.github.io/sorts/","@type":"BlogPosting","image":"https://cmubig.github.io/img/posts/2023-07-01-SoRTS/model.png","headline":"Social Robot Tree Search (SoRTS)","dateModified":"2023-07-01T10:00:00+00:00","datePublished":"2023-07-01T10:00:00+00:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<!-- head scripts --><!-- Added by Chen -->
+  <script type='text/javascript'
+    src='https://platform-api.sharethis.com/js/sharethis.js#property=5ee902d30e78e50012567eb4&product=inline-follow-buttons&cms=sop'
+    async='async'></script>
+
+  <!-- for mathjax support -->
+  
+
+</head>
+
+<body>
+    
+    <nav class="navbar is-primary">
+    <div class="container">
+        <div class="navbar-brand">
+            <a href="/" class="navbar-item navbar-logo">
+                BIGLab
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navMenu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="navMenu">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item ">Home</a>
+                
+                
+                
+                <a href="/research/"
+                    class="navbar-item ">Research</a>
+                
+                
+                
+                <a href="/publications/"
+                    class="navbar-item ">Publications</a>
+                
+                
+                
+                <a href="/news/"
+                    class="navbar-item ">News</a>
+                
+                
+                
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a href="/current-members/"
+                        class="navbar-link ">Team</a>
+                    <div class="navbar-dropdown">
+                        
+                        <a href="/current-members/"
+                            class="navbar-item ">Current Members</a>
+                        
+                        <a href="/alumni/"
+                            class="navbar-item ">Alumni</a>
+                        
+                    </div>
+                </div>
+                
+                
+                
+                <a href="/contact/"
+                    class="navbar-item ">Contact</a>
+                
+                
+                
+                <a href="/openings/"
+                    class="navbar-item ">Openings</a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    
+    
+
+
+    <section class="section">
+        <div class="container">
+            <div class="rows">
+                
+
+                
+                <div class="row is-8">
+                      <!-- 
+<div style="text-align: center; display: block; margin-left:auto; margin-right:auto">
+    <img style="text" src="/img/posts/2023-07-01-SoRTS/model.png" alt="Social Robot Tree Search (SoRTS)" />
+</div>
+ -->
+
+<!-- Figure out the relative link to the author -->
+
+
+
+
+
+
+
+
+<div class="content">
+	<h1>Social Robot Tree Search (SoRTS)</h1>
+	<h3> 
+Learned Tree Search for Long-Horizon Social Robot Navigation in Shared Airspace
+</h3>
+
+<p><a href="https://navars.xyz">Ingrid Navarro</a> *, <a href="https://www.jaypatrikar.me">Jay Patrikar</a> *, Joao P. A. Dantas, 
+Rohan Baijal, Ian Higgins, <a href="https://theairlab.org/team/sebastian/">Sebastian Scherer</a> and 
+<a href="https://www.cs.cmu.edu/~./jeanoh/">Jean Oh</a></p>
+
+<p>*Denotes equal contribution</p>
+
+<left>
+  <a class="button" itemprop="github" href="https://github.com/cmubig/sorts" target="_blank">
+    <i class="fab fa-github fa-lg"></i>
+  </a>
+    <a class="button" itemprop="youtube" href="https://www.youtube.com/watch?v=PBE3O4cW2rI" target="_blank">
+    <i class="fab fa-youtube fa-lg"></i>
+  </a>
+  <a class="button" itemprop="paper" href="https://arxiv.org/pdf/2304.01428.pdf" target="_blank">
+    <i class="fas fa-file fa-lg"></i>    
+  </a>
+</left>
+
+<h1 id="abstract">Abstract</h1>
+
+<p>The fast-growing demand for fully autonomous aerial operations in shared spaces necessitates developing
+trustworthy agents that can safely and seamlessly navigate in crowded, dynamic spaces. In this work, 
+we propose <strong>Social Robot Tree Search (SoRTS)</strong>, an algorithm for the safe navigation of mobile robots in 
+social domains. SoRTS aims to augment existing socially-aware trajectory prediction policies with a
+Monte Carlo Tree Search planner for improved downstream navigation of mobile robots. To evaluate the 
+performance of our method, we choose the use case of social navigation for general aviation. To aid 
+this evaluation, within this work, we also introduce <strong>X-PlaneROS</strong>, a high-fidelity aerial simulator,
+to enable more research in full-scale aerial autonomy. By conducting a user study based on the assessments 
+of <strong>26 FAA-certified pilots</strong>, we show that SoRTS performs comparably to a competent human pilot, 
+significantly outperforming our baseline algorithm. We further complement these results with
+self-play experiments, showcasing our algorithm’s behavior in scenarios with increasing complexity.</p>
+
+<hr />
+
+<h1 id="video-overview">Video Overview</h1>
+
+<p align="center">
+<iframe width="1280" height="720" src="https://www.youtube.com/embed/PBE3O4cW2rI" frameborder="0" allowfullscreen=""> </iframe>
+</p>
+
+<hr />
+
+<h1 id="method">Method</h1>
+
+<p>We present <strong>Social Robot Tree Search (SoRTS)</strong>, an algorithm for safe navigation of mobile robots in 
+social settings. SoRTS aims to augment existing data-driven socially-aware motion prediction models 
+with a Monte Carlo Tree Search (MCTS) planner, enabling long-horizon social navigation. Although the 
+algorithm is designed to be domain-independent, in our work we use general aviation in non-towered 
+airports as our case of study.</p>
+
+<p align="center">
+  <img width="1280" src="/img/posts/2023-07-01-SoRTS/model.png" alt="SoRTS" />
+</p>
+
+<p>SoRTS’ tree search is biased by <strong>social</strong> and a <strong>reference</strong> modules. The <strong>social</strong> module aims to 
+handle <em>short-horizon agent-to-agent dynamics</em>. It does so by leveraging socially-aware motion 
+prediction model which was trained offline on trajectory data.</p>
+
+<p align="center">
+  <img width="1280" src="/img/posts/2023-07-01-SoRTS/social_module.png" alt="SoRTS" />
+</p>
+
+<p>The <strong>reference</strong> module provides a global path to the agent which embodies a navigation 
+guideline <em>(e.g., an FAA-established flying pattern)</em> that the agent should stick to whenever there 
+aren’t any <em>social conflicts</em> to resolve. This module also provides a cost map that represents a
+frequence count map to encourage the agent to visit most-frequent regions.</p>
+
+<p align="center">
+  <img width="1280" src="/img/posts/2023-07-01-SoRTS/reference_module.png" alt="SoRTS" />
+</p>
+
+<p>Finally, SoRTS’s combines the decision modalities of these two modules via <strong>Monte Carlo Tree Search 
+(MCTS)</strong> to achieve long-horizon navigation by backpropagating most successful outcomes. The figure 
+below shows a <em>toy-example</em> of two aircraft merging on a single path, where each can execute three 
+possible motion primitives <sup>1</sup>: forward, speed up, and slow down. MCTS, in its forward simulations, 
+not only prunes branches that lead to future collisions but also uses the social module to choose between 
+cutting-in-front (socially undesirable) and yielding (socially desirable), thereby producing socially 
+compliant and safe behavior.</p>
+
+<p align="center">
+  <img width="1280" src="/img/posts/2023-07-01-SoRTS/mcts_module.png" alt="SoRTS" />
+</p>
+
+<h1 id="results">Results</h1>
+
+<p>We support our method with two evaluation settings: a user study and self-play experiments.</p>
+
+<h3 id="user-study">User-Study</h3>
+
+<p>We designed a <strong>within-subject</strong> study with 26 participants, all of which were FAA-certified. 
+Using our flight simulator, <a href="https://theairlab.org/xplane_ros/"><strong>XPlaneROS</strong></a>, we asked users to 
+land an aircraft at a specified runway while interacting with a second pilot instructed to complete
+the same task. The task required both pilots to coordinate with each other, i.e., being 
+socially-compliant and follow FAA flying patterns. As shown in the figure below, the second pilot
+was either a human, SoRTS or a baseline<sup>2</sup> algorithm. In each trial, the algorithm<sup>3</sup> 
+order was randomly chosen.</p>
+
+<p align="center">
+  <img width="600" src="/img/posts/2023-07-01-SoRTS/user_study.png" alt="SoRTS" />
+</p>
+
+<p>The study aimed at analyzing the second pilot’s <strong>navigational performance</strong> (e.g, ability to follow
+rules, navigate smoothly, etc) and <strong>safety</strong> (e.g, comfort, collision risk, etc) by analyzing how 
+the users perceived the other pilot, but also by studying the trajectory information from each trial.</p>
+
+<p>Overall, we found that users rated SoRTS’ and the human’s competence similarly, while the baseline was 
+perceived as less competent. The figure below shows examples of two experiments. <strong>Left:</strong> Each row shows the 
+resulting trajectories of a user interacting with our human pilot, SoRTS, and the baseline. 
+The top row shows a user that successfully followed the expected guideline; we can see that the 
+baseline did not fly as smoothly as SoRTS, and abruptly cut short close to the goal. The 
+bottom row shows a user that did not follow the expected guideline; our algorithm still 
+managed to navigate properly, whereas the baseline behaved erratically, unsafely crossing 
+over the runway. <strong>Right:</strong> Box-plots showing the <em>per-algorithm</em> distribution 
+of the results from the user study: the top ones show the average scores given by the user 
+for navigation performance (a) and safety (b). The bottom ones show the average reference error 
+(a) and loss-of-separation (b) metrics obtained from the trajectory data.</p>
+
+<p align="center">
+  <img width="1280" src="/img/posts/2023-07-01-SoRTS/user_study_results.png" alt="SoRTS" />
+</p>
+
+<h3 id="self-play-experiments">Self-Play Experiments</h3>
+
+<p>We also performed self-play experiments to further examine the behavior of our algorithm and its 
+baseline. These experiments follow the same design as our user study but we also analyze experiments 
+with 3 and 4 agents in each scenario. The figure below shows animated examples from our simulations. 
+We also provide quantitative evaluations, performed on the resulting trajectories.</p>
+
+<table align="center">
+  <tr>
+    <td>Baseline</td>
+    <td>SoRTS</td>
+  </tr>
+  <tr>
+    <td><img src="/img/posts/2023-07-01-SoRTS/baseline_2agents.gif" width="400" /></td>
+    <td><img src="/img/posts/2023-07-01-SoRTS/sorts_2agents.gif" width="400" /></td>
+  </tr>
+  <tr>
+    <td><img src="/img/posts/2023-07-01-SoRTS/baseline_4agents.gif" width="400" /></td>
+    <td><img src="/img/posts/2023-07-01-SoRTS/sorts_4agents.gif" width="400" /></td>
+  </tr>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Num Agents</th>
+      <th style="text-align: center">Algorithms</th>
+      <th style="text-align: center">Success Rate</th>
+      <th style="text-align: center">Timeout</th>
+      <th style="text-align: center">Loss-Of-Separation</th>
+      <th style="text-align: center">Offtrack</th>
+      <th style="text-align: center">Reference Error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">Baseline</td>
+      <td style="text-align: center">0.760</td>
+      <td style="text-align: center">0.190</td>
+      <td style="text-align: center">0.000</td>
+      <td style="text-align: center">0.050</td>
+      <td style="text-align: center">19.34</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">SoRTS</td>
+      <td style="text-align: center">0.950</td>
+      <td style="text-align: center">0.040</td>
+      <td style="text-align: center">0.000</td>
+      <td style="text-align: center">0.010</td>
+      <td style="text-align: center">13.69</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">Baseline</td>
+      <td style="text-align: center">0.747</td>
+      <td style="text-align: center">0.218</td>
+      <td style="text-align: center">0.000</td>
+      <td style="text-align: center">0.067</td>
+      <td style="text-align: center">19.34</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">SoRTS</td>
+      <td style="text-align: center">0.943</td>
+      <td style="text-align: center">0.030</td>
+      <td style="text-align: center">0.000</td>
+      <td style="text-align: center">0.027</td>
+      <td style="text-align: center">15.68</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">Baseline</td>
+      <td style="text-align: center">0.483</td>
+      <td style="text-align: center">0.510</td>
+      <td style="text-align: center">0.000</td>
+      <td style="text-align: center">0.007</td>
+      <td style="text-align: center">19.34</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center">SoRTS</td>
+      <td style="text-align: center">0.932</td>
+      <td style="text-align: center">0.055</td>
+      <td style="text-align: center">0.000</td>
+      <td style="text-align: center">0.013</td>
+      <td style="text-align: center">15.68</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h4 id="footnotes">Footnotes</h4>
+
+<ol>
+  <li>In our method, we actually leverage a set of 252 motion primitives.</li>
+  <li>The baseline algorithm uses the same <strong>social</strong> and <strong>reference</strong> components but combines them
+naively by weighting them together.</li>
+  <li>We use second pilot and algorithm interchangeably.</li>
+</ol>
+
+<h1 id="bibtex">BibTeX</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@inproceedings{navarro2023learned,
+  title={Learned Tree Search for Long-Horizon Social Robot Navigation in Shared Airspace},
+  author={Navarro Ingrid, Jay Patrikar, Joao P. A. Dantas, Rohan Baijal, Ian Higgins, Sebastian Scherer and Jean Oh},
+  booktitle={Arxiv},
+  year={2023}
+ }
+
+</code></pre></div></div>
+
+</div>
+
+<div class="tags">
+	
+</div>
+
+
+
+
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'https://cmubig.github.io/sorts/';
+      this.page.identifier = 'https://cmubig.github.io/sorts/';
+    };
+    (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://biglab.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+                </div>
+                
+                <div class="container">
+                    <p class="title is-4">Latest Research</p>
+
+<div class="columns auto">
+    
+    <div class="column auto">
+        <a href="/sorts/">
+<div class="card" style="height: 100%; display: flex; flex-direction: column; align-items: center;">
+    
+        <div style="height: 200px;">
+            <img src="/img/posts/2023-07-01-SoRTS/model.png" alt="Social Robot Tree Search (SoRTS)" style="object-fit: contain; height: 100%;">
+        </div>
+    
+    <div class="card-content" style="flex-grow: 3;">
+        <div class="content">
+            
+            <div class="title is-5">Social Robot Tree Search (SoRTS)</div>
+            
+            <p> Learned Tree Search for Long-Horizon Social Robot Navigation in Shared Airspace</p>
+        </div>
+    </div>
+    <footer class="card-footer">
+        <p class="card-footer-item">Published: Jul 1, 2023</p>
+    </footer>
+</div>
+</a>
+
+    </div>
+    
+</div>
+
+
+
+
+                </div>
+                
+            </div>
+        </div>
+    </section>
+     <style>
+  #blocks {
+    width: 100%;
+    height: 60px;
+    margin: 0 auto;
+    /* background-color: #ffe; */
+  }
+
+  #block1 {
+    height: 33.33%;
+    width: 30%;
+    /* background: red; */
+    float: left;
+  }
+
+  #block2 {
+    height: 33.33%;
+    width: 40%;
+    /* background: yellow; */
+    float: left;
+  }
+
+  #block3 {
+    height: 33.33%;
+    width: 30%;
+    /* background: green; */
+    float: right;
+  }
+</style>
+
+<footer class="footer">
+  <div class="container">
+    <div id="blocks">
+      <div id="block1"><img src="/img/logos/large.png" alt="BIG Lab Logo" style="width:30%;"></div>
+      <div id="block2">
+        <center>
+          <a class="button" itemprop="twitter" href="https://twitter.com/CMUBigLab" target="_blank">
+            <i class="fab fa-twitter fa-lg"></i>
+          </a>
+          <a class="button" itemprop="github" href="https://github.com/cmubig" target="_blank">
+            <i class="fab fa-github fa-lg"></i>
+          </a>
+          <br>
+          <br>
+          <p class="">&copy; 2024 | BIGLab</a></p>
+        </center>
+      </div>
+      <div id="block3"><img src="/img/riLogo2019.svg" alt="RI Logo" style="float: right;"></div>
+    </div>
+  </div>
+
+
+</footer> 
+    <script src="/assets/js/app.js" type="text/javascript"></script><!-- footer scripts --></body>
+
+</html>

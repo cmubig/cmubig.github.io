@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://cmubig.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://cmubig.github.io/" rel="alternate" type="text/html" /><updated>2024-03-22T05:50:22+00:00</updated><id>https://cmubig.github.io/feed.xml</id><title type="html">BIGLab</title><subtitle>Researching, developing, and testing autonomous robots at Carnegie Mellon University
+</subtitle><entry><title type="html">Social Robot Tree Search (SoRTS)</title><link href="https://cmubig.github.io/sorts/" rel="alternate" type="text/html" title="Social Robot Tree Search (SoRTS)" /><published>2023-07-01T10:00:00+00:00</published><updated>2023-07-01T10:00:00+00:00</updated><id>https://cmubig.github.io/SoRTS</id><content type="html" xml:base="https://cmubig.github.io/sorts/">&lt;h3&gt; 
+Learned Tree Search for Long-Horizon Social Robot Navigation in Shared Airspace
+&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://navars.xyz&quot;&gt;Ingrid Navarro&lt;/a&gt; *, &lt;a href=&quot;https://www.jaypatrikar.me&quot;&gt;Jay Patrikar&lt;/a&gt; *, Joao P. A. Dantas, 
+Rohan Baijal, Ian Higgins, &lt;a href=&quot;https://theairlab.org/team/sebastian/&quot;&gt;Sebastian Scherer&lt;/a&gt; and 
+&lt;a href=&quot;https://www.cs.cmu.edu/~./jeanoh/&quot;&gt;Jean Oh&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;*Denotes equal contribution&lt;/p&gt;
+
+&lt;left&gt;
+  &lt;a class=&quot;button&quot; itemprop=&quot;github&quot; href=&quot;https://github.com/cmubig/sorts&quot; target=&quot;_blank&quot;&gt;
+    &lt;i class=&quot;fab fa-github fa-lg&quot;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+    &lt;a class=&quot;button&quot; itemprop=&quot;youtube&quot; href=&quot;https://www.youtube.com/watch?v=PBE3O4cW2rI&quot; target=&quot;_blank&quot;&gt;
+    &lt;i class=&quot;fab fa-youtube fa-lg&quot;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+  &lt;a class=&quot;button&quot; itemprop=&quot;paper&quot; href=&quot;https://arxiv.org/pdf/2304.01428.pdf&quot; target=&quot;_blank&quot;&gt;
+    &lt;i class=&quot;fas fa-file fa-lg&quot;&gt;&lt;/i&gt;    
+  &lt;/a&gt;
+&lt;/left&gt;
+
+&lt;h1 id=&quot;abstract&quot;&gt;Abstract&lt;/h1&gt;
+
+&lt;p&gt;The fast-growing demand for fully autonomous aerial operations in shared spaces necessitates developing
+trustworthy agents that can safely and seamlessly navigate in crowded, dynamic spaces. In this work, 
+we propose &lt;strong&gt;Social Robot Tree Search (SoRTS)&lt;/strong&gt;, an algorithm for the safe navigation of mobile robots in 
+social domains. SoRTS aims to augment existing socially-aware trajectory prediction policies with a
+Monte Carlo Tree Search planner for improved downstream navigation of mobile robots. To evaluate the 
+performance of our method, we choose the use case of social navigation for general aviation. To aid 
+this evaluation, within this work, we also introduce &lt;strong&gt;X-PlaneROS&lt;/strong&gt;, a high-fidelity aerial simulator,
+to enable more research in full-scale aerial autonomy. By conducting a user study based on the assessments 
+of &lt;strong&gt;26 FAA-certified pilots&lt;/strong&gt;, we show that SoRTS performs comparably to a competent human pilot, 
+significantly outperforming our baseline algorithm. We further complement these results with
+self-play experiments, showcasing our algorithm’s behavior in scenarios with increasing complexity.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;video-overview&quot;&gt;Video Overview&lt;/h1&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+&lt;iframe width=&quot;1280&quot; height=&quot;720&quot; src=&quot;https://www.youtube.com/embed/PBE3O4cW2rI&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt; &lt;/iframe&gt;
+&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;method&quot;&gt;Method&lt;/h1&gt;
+
+&lt;p&gt;We present &lt;strong&gt;Social Robot Tree Search (SoRTS)&lt;/strong&gt;, an algorithm for safe navigation of mobile robots in 
+social settings. SoRTS aims to augment existing data-driven socially-aware motion prediction models 
+with a Monte Carlo Tree Search (MCTS) planner, enabling long-horizon social navigation. Although the 
+algorithm is designed to be domain-independent, in our work we use general aviation in non-towered 
+airports as our case of study.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;1280&quot; src=&quot;/img/posts/2023-07-01-SoRTS/model.png&quot; alt=&quot;SoRTS&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;SoRTS’ tree search is biased by &lt;strong&gt;social&lt;/strong&gt; and a &lt;strong&gt;reference&lt;/strong&gt; modules. The &lt;strong&gt;social&lt;/strong&gt; module aims to 
+handle &lt;em&gt;short-horizon agent-to-agent dynamics&lt;/em&gt;. It does so by leveraging socially-aware motion 
+prediction model which was trained offline on trajectory data.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;1280&quot; src=&quot;/img/posts/2023-07-01-SoRTS/social_module.png&quot; alt=&quot;SoRTS&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;reference&lt;/strong&gt; module provides a global path to the agent which embodies a navigation 
+guideline &lt;em&gt;(e.g., an FAA-established flying pattern)&lt;/em&gt; that the agent should stick to whenever there 
+aren’t any &lt;em&gt;social conflicts&lt;/em&gt; to resolve. This module also provides a cost map that represents a
+frequence count map to encourage the agent to visit most-frequent regions.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;1280&quot; src=&quot;/img/posts/2023-07-01-SoRTS/reference_module.png&quot; alt=&quot;SoRTS&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Finally, SoRTS’s combines the decision modalities of these two modules via &lt;strong&gt;Monte Carlo Tree Search 
+(MCTS)&lt;/strong&gt; to achieve long-horizon navigation by backpropagating most successful outcomes. The figure 
+below shows a &lt;em&gt;toy-example&lt;/em&gt; of two aircraft merging on a single path, where each can execute three 
+possible motion primitives &lt;sup&gt;1&lt;/sup&gt;: forward, speed up, and slow down. MCTS, in its forward simulations, 
+not only prunes branches that lead to future collisions but also uses the social module to choose between 
+cutting-in-front (socially undesirable) and yielding (socially desirable), thereby producing socially 
+compliant and safe behavior.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;1280&quot; src=&quot;/img/posts/2023-07-01-SoRTS/mcts_module.png&quot; alt=&quot;SoRTS&quot; /&gt;
+&lt;/p&gt;
+
+&lt;h1 id=&quot;results&quot;&gt;Results&lt;/h1&gt;
+
+&lt;p&gt;We support our method with two evaluation settings: a user study and self-play experiments.&lt;/p&gt;
+
+&lt;h3 id=&quot;user-study&quot;&gt;User-Study&lt;/h3&gt;
+
+&lt;p&gt;We designed a &lt;strong&gt;within-subject&lt;/strong&gt; study with 26 participants, all of which were FAA-certified. 
+Using our flight simulator, &lt;a href=&quot;https://theairlab.org/xplane_ros/&quot;&gt;&lt;strong&gt;XPlaneROS&lt;/strong&gt;&lt;/a&gt;, we asked users to 
+land an aircraft at a specified runway while interacting with a second pilot instructed to complete
+the same task. The task required both pilots to coordinate with each other, i.e., being 
+socially-compliant and follow FAA flying patterns. As shown in the figure below, the second pilot
+was either a human, SoRTS or a baseline&lt;sup&gt;2&lt;/sup&gt; algorithm. In each trial, the algorithm&lt;sup&gt;3&lt;/sup&gt; 
+order was randomly chosen.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;600&quot; src=&quot;/img/posts/2023-07-01-SoRTS/user_study.png&quot; alt=&quot;SoRTS&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The study aimed at analyzing the second pilot’s &lt;strong&gt;navigational performance&lt;/strong&gt; (e.g, ability to follow
+rules, navigate smoothly, etc) and &lt;strong&gt;safety&lt;/strong&gt; (e.g, comfort, collision risk, etc) by analyzing how 
+the users perceived the other pilot, but also by studying the trajectory information from each trial.&lt;/p&gt;
+
+&lt;p&gt;Overall, we found that users rated SoRTS’ and the human’s competence similarly, while the baseline was 
+perceived as less competent. The figure below shows examples of two experiments. &lt;strong&gt;Left:&lt;/strong&gt; Each row shows the 
+resulting trajectories of a user interacting with our human pilot, SoRTS, and the baseline. 
+The top row shows a user that successfully followed the expected guideline; we can see that the 
+baseline did not fly as smoothly as SoRTS, and abruptly cut short close to the goal. The 
+bottom row shows a user that did not follow the expected guideline; our algorithm still 
+managed to navigate properly, whereas the baseline behaved erratically, unsafely crossing 
+over the runway. &lt;strong&gt;Right:&lt;/strong&gt; Box-plots showing the &lt;em&gt;per-algorithm&lt;/em&gt; distribution 
+of the results from the user study: the top ones show the average scores given by the user 
+for navigation performance (a) and safety (b). The bottom ones show the average reference error 
+(a) and loss-of-separation (b) metrics obtained from the trajectory data.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;1280&quot; src=&quot;/img/posts/2023-07-01-SoRTS/user_study_results.png&quot; alt=&quot;SoRTS&quot; /&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&quot;self-play-experiments&quot;&gt;Self-Play Experiments&lt;/h3&gt;
+
+&lt;p&gt;We also performed self-play experiments to further examine the behavior of our algorithm and its 
+baseline. These experiments follow the same design as our user study but we also analyze experiments 
+with 3 and 4 agents in each scenario. The figure below shows animated examples from our simulations. 
+We also provide quantitative evaluations, performed on the resulting trajectories.&lt;/p&gt;
+
+&lt;table align=&quot;center&quot;&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Baseline&lt;/td&gt;
+    &lt;td&gt;SoRTS&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;img src=&quot;/img/posts/2023-07-01-SoRTS/baseline_2agents.gif&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src=&quot;/img/posts/2023-07-01-SoRTS/sorts_2agents.gif&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&lt;img src=&quot;/img/posts/2023-07-01-SoRTS/baseline_4agents.gif&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;img src=&quot;/img/posts/2023-07-01-SoRTS/sorts_4agents.gif&quot; width=&quot;400&quot; /&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Num Agents&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Algorithms&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Success Rate&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Timeout&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Loss-Of-Separation&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Offtrack&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Reference Error&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;2&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Baseline&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.760&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.190&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.000&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.050&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;19.34&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt; &lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;SoRTS&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.950&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.040&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.000&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.010&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;13.69&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;3&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Baseline&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.747&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.218&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.000&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.067&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;19.34&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt; &lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;SoRTS&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.943&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.030&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.000&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.027&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;15.68&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;4&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Baseline&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.483&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.510&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.000&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.007&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;19.34&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt; &lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;SoRTS&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.932&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.055&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.000&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;0.013&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;15.68&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;h4 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;In our method, we actually leverage a set of 252 motion primitives.&lt;/li&gt;
+  &lt;li&gt;The baseline algorithm uses the same &lt;strong&gt;social&lt;/strong&gt; and &lt;strong&gt;reference&lt;/strong&gt; components but combines them
+naively by weighting them together.&lt;/li&gt;
+  &lt;li&gt;We use second pilot and algorithm interchangeably.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;bibtex&quot;&gt;BibTeX&lt;/h1&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@inproceedings{navarro2023learned,
+  title={Learned Tree Search for Long-Horizon Social Robot Navigation in Shared Airspace},
+  author={Navarro Ingrid, Jay Patrikar, Joao P. A. Dantas, Rohan Baijal, Ian Higgins, Sebastian Scherer and Jean Oh},
+  booktitle={Arxiv},
+  year={2023}
+ }
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Ingrid Navarro</name></author><category term="research" /><summary type="html">Learned Tree Search for Long-Horizon Social Robot Navigation in Shared Airspace</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://cmubig.github.io/img/posts/2023-07-01-SoRTS/model.png" /><media:content medium="image" url="https://cmubig.github.io/img/posts/2023-07-01-SoRTS/model.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
