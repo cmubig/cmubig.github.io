@@ -32,11 +32,11 @@ https://tailwindcss.com/docs/adding-custom-styles#using-css-and-layer
   padding-block: unset;
 }
 
-.tagline > a {
+.tagline a {
   color: var(--sl-color-text-accent);
 }
 
-.tagline > a:hover:not(:where(.not-content *)) {
+.tagline a:hover:not(:where(.not-content *)) {
   color: var(--sl-color-white);
 }
 
