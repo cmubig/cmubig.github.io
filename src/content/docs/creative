@@ -1,0 +1,80 @@
+---
+title: Arts in Robotics
+template: splash
+---
+
+import { CardGrid } from '@astrojs/starlight/components'
+import Research from '../../components/Research.astro'
+
+<div class="research-grid">
+  <CardGrid stagger>
+  <Research
+      title="Spline-FRIDA: Towards Diverse, Humanlike Robot Painting Styles with a Sample-Efficient, Differentiable Brush Stroke Model"
+      venue="RA-L 2025"
+      note=""
+      href="https://arxiv.org/pdf/2412.00597"
+      img="/research/spline-frida.png"
+  ></Research>
+     
+    <Research
+      title="CoFRIDA: Self-Supervised Fine-Tuning for Human-Robot Co-Painting"
+      venue="ICRA'24"
+      note="(Best Paper Award in Human-Robot Interaction)"
+      href="https://pschaldenbrand.github.io/cofrida/"
+      vid="/research/cofrida.mp4"
+    ></Research>
+    <Research
+      title="Robot Synesthesia: A Sound and Emotion Guided AI Painter"
+      venue="IROS'24"
+      note="(Best Paper Award in Entertainment and Amusement)"
+      href="https://convexalpha.github.io/Robot-Synesthesia/"
+      img="/research/robotsynesthesia.jpg"
+    ></Research>
+    <Research
+      title="FRIDA: A Collaborative Robot Painter with a Differentiable, Real2Sim2Real Planning Environment"
+      venue="ICRA'23"
+      note="(Best Paper Award Finalist in Deployed Systems)"
+      href="https://pschaldenbrand.github.io/frida/"
+      img="/research/frida.gif"
+    ></Research>
+    
+  </CardGrid>
+
+   <CardGrid stagger>
+  <Research
+      title="SCoFT: Self-Contrastive Fine-Tuning for Equitable Image Generation"
+      venue="CVPR'24"
+      href="https://ariannaliu.github.io/SCoFT/"
+      img="/research/scoft.png"
+    ></Research>
+  
+  </CardGrid>
+
+
+   <CardGrid stagger>
+ <Research
+      title="MOE-Hair: Soft and Compliant Contact-Rich Hair Manipulation and Care"
+      venue="HRI'25"
+      note="(Best Systems Paper Award Finalist)"
+      href="https://moehair.github.io/"
+      vid="/research/moe_hair.mov"
+    ></Research>
+  
+    <Research
+      title="RoPotter: Toward Robotic Pottery and Deformable Object Manipulation with Structural Priors"
+      venue="Humanoids'24"
+      note="(Best Oral Presentation Finalist)"
+      href="https://robot-pottery.github.io/"
+      vid="/research/ropotter.mp4"
+    ></Research>
+  </CardGrid>
+  
+</div>
+
+---
+
+<div style="text-align: center;">
+  <h5>
+    <!-- test -->
+  </h5>
+</div>
