@@ -7,6 +7,15 @@ import { CardGrid } from '@astrojs/starlight/components'
 import Research from '../../components/Research.astro'
 
 <div class="research-grid">
+<CardGrid stagger>
+  <Research
+      title="The Robot Fashion Show"
+      venue="Humanoids'25"
+      note=""
+      href="https://robotfashion.show/"
+      img="/research/rfs.png"
+  ></Research>
+</CardGrid>
   <CardGrid stagger>
   <Research
       title="Spline-FRIDA: Towards Diverse, Humanlike Robot Painting Styles with a Sample-Efficient, Differentiable Brush Stroke Model"
