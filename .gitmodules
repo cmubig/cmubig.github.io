@@ -1,0 +1,3 @@
+[submodule "rfs"]
+	path = rfs
+	url = git@github.com:cmubig/robot-fashion-show.git
